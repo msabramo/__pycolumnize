@@ -12,12 +12,16 @@ def computed_displaywidth():
     and failing that use 80.
     '''
     width=80
-    if 'COLUMNS' in os.environ:
+    try:
+        width = int(os.environ['COLUMNS'])
+    except:
         try:
-            width = int(os.environ['COLUMNS'])
+            width = int(os.popen('tput cols').read())
         except:
-            pass
-        pass
+            try:
+                width = int(os.popen('stty size').read().split()[1])
+            except:
+                pass
     return width
 
 default_opts = {
